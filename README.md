@@ -4,6 +4,8 @@
 
 项目位于 [`PaddleOcrApp/`](PaddleOcrApp/)，详细文档见 [PaddleOcrApp/README.md](PaddleOcrApp/README.md)。
 
+> 🤖 本项目 100% Vibe Coding 生成：从需求、功能到测试全部由 AI 协作完成。
+
 ## 功能特性
 
 - 📷 拍照 / 相册选图（Photo Picker，无需存储权限），手动框选识别区域（拖拽、八向手柄、放大镜、实时预览）
@@ -43,6 +45,10 @@ Room schema 历史快照保存在 `PaddleOcrApp/app/schemas/`，随仓库提交�
 - AI Studio：在 [AI Studio PaddleOCR 服务页](https://aistudio.baidu.com/paddleocr/task) 创建任务，获取任务 URL / Token / 模型名填入 App 设置
 
 手机与电脑连同一局域网即可直接使用 `http://` 地址。
+
+## Vibe Coding
+
+本项目 100% Vibe Coding：代码、功能与测试全部由 AI 协作生成，没有手写一行代码。
 
 ## License
 
