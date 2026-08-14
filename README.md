@@ -42,12 +42,7 @@ Room schema 历史快照保存在 `PaddleOcrApp/app/schemas/`，随仓库提交�
 - PaddleHub：`pip install paddlehub==2.1.0 paddlepaddle && hub serving start -m ocr_system`，默认 `8866`
 - AI Studio：在 [AI Studio PaddleOCR 服务页](https://aistudio.baidu.com/paddleocr/task) 创建任务，获取任务 URL / Token / 模型名填入 App 设置
 
-手机与电脑连同一局域网即可使用 `http://` 地址；公网部署建议加 HTTPS。
-
-## 安全说明
-
-- `keystore.jks` / `keystore.properties` 已被 `.gitignore` 排除，**严禁提交签名密钥**；发布前请更换默认密码并妥善保管。
-- 明文 HTTP 仅用于局域网调试，`network_security_config.xml` 已放行 cleartext，生产环境请收紧。
+手机与电脑连同一局域网即可直接使用 `http://` 地址。
 
 ## License
 
