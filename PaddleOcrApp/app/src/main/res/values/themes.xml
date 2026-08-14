@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- DayNight：跟随系统深浅色；界面文字使用语义色随主题自适应 -->
+    <style name="Theme.PaddleOcr" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accent</item>
+        <item name="android:statusBarColor">@color/primary</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/primary</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <!-- Android 15+ 默认强制 edge-to-edge，内容会顶到状态栏下面；
+             这里按传统模式处理，内容从状态栏下方开始，状态栏保持品牌色 -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+    </style>
+</resources>

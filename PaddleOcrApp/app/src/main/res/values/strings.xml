@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">飞桨OCR识图</string>
+
+    <string name="main_title">飞桨OCR识图</string>
+    <string name="main_subtitle">调用 PaddleOCR 服务识别图片文字</string>
+    <string name="choose_source">选择图片来源</string>
+    <string name="btn_camera">拍照识别</string>
+    <string name="btn_gallery">从相册选择图片</string>
+    <string name="btn_batch">批量识别（多张图片）</string>
+    <string name="offline_badge">离线模式：识别在本机完成，不联网、不耗额度</string>
+    <string name="last_result_title">最近识别结果</string>
+    <string name="last_result_time">%1$s</string>
+    <string name="btn_view_detail">查看详情</string>
+
+    <string name="nav_ocr">OCR</string>
+    <string name="nav_history">历史记录</string>
+    <string name="history_title">历史记录</string>
+    <string name="history_empty">暂无识别记录</string>
+    <string name="history_stats">共 %1$d 行文字</string>
+    <string name="history_total">共 %1$d 条记录</string>
+    <string name="history_search_hint">搜索历史内容…</string>
+    <string name="history_favorite">收藏</string>
+    <string name="history_delete">删除</string>
+    <string name="history_clear_title">清空历史</string>
+    <string name="history_clear_confirm">将删除全部历史记录及保存的图片，且不可恢复。确定清空吗？</string>
+    <string name="history_clear_ok">清空</string>
+
+    <string name="quota_title">云端配额（估算）</string>
+    <string name="quota_model">模型：%1$s</string>
+    <string name="quota_detail">今日已用 %1$d 页，剩余约 %2$d 页（上限 %3$d 页/天）</string>
+    <string name="quota_hint">按本机识别统计估算，实际以云端为准；429 时自动切换模型</string>
+    <string name="quota_exhausted">今日云端额度已用完，请更换模型或明天再试</string>
+    <string name="quota_refresh">刷新</string>
+
+    <string name="crop_title">选择识别区域</string>
+    <string name="loading_image">图片加载中…</string>
+    <string name="selection_label">选区预览</string>
+    <string name="selection_size">约占整图 %1$d%% × %2$d%%</string>
+    <string name="btn_reset">重置选区</string>
+    <string name="btn_start_ocr">开始识别</string>
+    <string name="btn_cancel_ocr">取消</string>
+    <string name="ocr_progress_title">正在识别…</string>
+    <string name="toast_ocr_cancelled">已取消识别</string>
+
+    <string name="result_title">识别结果</string>
+    <string name="result_stats">共 %1$d 行文字，平均置信度 %2$.2f</string>
+    <string name="result_stats_no_conf">共 %1$d 行文字</string>
+    <string name="btn_copy">复制文字</string>
+    <string name="btn_share">分享结果</string>
+    <string name="btn_overlay">查看识别框</string>
+    <string name="btn_export_txt">导出 TXT</string>
+    <string name="btn_export_md">导出 Markdown</string>
+    <string name="exported">已保存</string>
+    <string name="copied">已复制到剪贴板</string>
+    <string name="empty_result">未识别到文字</string>
+
+    <string name="overlay_title">识别框叠加</string>
+    <string name="overlay_stats">共检测到 %1$d 个文字区域（编号与结果行对应）</string>
+    <string name="overlay_unavailable">该记录没有保存原图，无法叠加显示</string>
+
+    <string name="batch_title">批量识别</string>
+    <string name="batch_cancel">取消</string>
+    <string name="batch_status_queued">排队中…</string>
+    <string name="batch_status_running">识别中…</string>
+    <string name="batch_status_success">识别成功，点击查看</string>
+    <string name="batch_status_failed">识别失败</string>
+    <string name="batch_status_cancelled">已取消</string>
+    <string name="batch_summary">全部完成：成功 %1$d 张，失败 %2$d 张</string>
+    <string name="batch_export_all">导出全部</string>
+    <string name="batch_retry_all">重试失败</string>
+    <string name="batch_retry_one">重试</string>
+    <string name="batch_retry_title">重试失败任务</string>
+    <string name="batch_retry_confirm">将重新识别 %1$d 张失败图片，继续吗？</string>
+    <string name="batch_nothing_to_export">没有可导出的成功结果</string>
+
+    <string name="settings_title">服务器设置</string>
+    <string name="settings_mode_label">识别服务类型</string>
+    <string name="settings_url_hint">API 地址</string>
+    <string name="settings_token_hint">Access Token（仅 AI Studio 需要，加密存储）</string>
+    <string name="settings_model_label">模型名称（AI Studio）</string>
+    <string name="settings_filetype_label">PaddleX 图片 fileType 取值</string>
+    <string name="settings_hub_image_check">旧版 PaddleHub：使用 image 单字段</string>
+    <string name="settings_network_title">网络与重试</string>
+    <string name="settings_timeout_label">读取超时</string>
+    <string name="settings_retry_label">失败重试次数</string>
+    <string name="settings_auto_switch">云端额度用完时自动切换其他模型重试</string>
+    <string name="settings_http_warning">当前为 http:// 明文地址，仅建议在可信局域网内使用；公网请改用 https://</string>
+    <string name="settings_offline_body">离线模式使用随应用内置的 PP-OCRv4 轻量模型在本机识别：\n\n• 无需网络、不消耗云端额度、图片不上传，隐私最好；\n• 适合纯文字识别，速度较快；复杂版式（表格/公式）建议改用云端 VL 模型；\n• 首次使用会加载约 15MB 内置模型，耗时 1~2 秒。\n\n如需更多语言或更高精度，可在服务设置中切换回云端/局域网模式。</string>
+    <string name="settings_save">保存设置</string>
+    <string name="settings_saved">设置已保存</string>
+    <string name="settings_url_invalid">请输入以 http:// 或 https:// 开头且完整的有效地址</string>
+    <string name="settings_help_title">使用说明</string>
+    <string name="help_body">1. 选择图片\n拍照识别：调用系统相机拍摄，拍完自动进入选区页面。\n从相册选择：使用系统照片选择器（无需存储权限）。\n批量识别：一次选择多张图片，自动依次全图识别，完成后可逐张查看或合并导出。\n\n2. 框选识别区域\n拖动选区或四角定位点调整范围，八方向手柄可微调，整体可移动；选区上方有放大镜预览。默认全图 100% × 100% 表示识别整张图片。识别时只上传选区部分，既省流量也更精准。\n\n3. 服务类型配置（服务器设置）\n端侧离线识别：内置 PP-OCRv4 轻量模型，完全在本机运行，无需网络、不消耗云端额度、图片不上传；适合日常纯文字识别。\nPaddleX 基础服务（PP-OCRv5/v6）：在电脑执行 pip install paddlex 后运行 paddlex --serve --pipeline OCR 启动服务（默认端口 8080），手机与电脑同一局域网时把 API 地址改为电脑局域网 IP，如 http://192.168.1.100:8080/ocr/predict。fileType 填 1（新版服务）或 0（PaddleX 3.0/3.1 旧版）。\nPaddleHub Serving（PP-OCRv3）：pip install paddlehub==2.1.0 paddlepaddle，执行 hub serving start -m ocr_system（默认端口 8866），地址形如 http://192.168.1.100:8866/predict/ocr_system；旧版可勾选 image 单字段。\nAI Studio 云端 API：打开 https://aistudio.baidu.com/paddleocr/task 创建任务，获取任务接口 URL、Access Token 与模型名称。需要手机联网，无需部署本地服务。Token 已加密存储于本机安全硬件。\n\n4. 云端模型选择（AI Studio）\nPaddleOCR-VL-1.6 / 1.5 / VL：通用文档解析与智能文字识别，支持版式分析、表格、公式、印章等，返回结构化 Markdown（结果页直接渲染表格/标题）；适合复杂文档、长文本、图文混排。\nPP-OCRv6 / PP-OCRv5：经典轻量 OCR 模型，速度快、体积小，适合纯文字识别。\nPP-StructureV3：文档结构解析模型，擅长版面分析、表格还原、公式识别。\n\n5. 云端配额\n官方规则为每模型每日 3000 页，超过返回 429。主页配额卡片按本机成功识别页数估算；可在设置中开启“额度用完自动切换模型”，429 时自动换用其他候选模型重试，全部失败才提示额度用尽。\n\n6. 识别结果\nVL 模型结果以 Markdown 展示（表格、标题、列表保持结构）；带坐标的结果可点“查看识别框”在原图上查看每个文字区域位置；支持复制、分享，以及导出 TXT / Markdown / PDF 文件。\n\n7. 历史记录\n每次识别自动存入历史（最多保留 2000 条），支持全文搜索、按日期分组、收藏、单条删除与一键清空；点击条目查看全文。\n\n8. 常见错误码\n400：参数无效，多为 optionalPayload 格式问题（云端接口请传空对象 {}）。\n403：Token 错误或 URL 与 Token 不匹配。\n413：请求体过大，请缩小图片或选区。\n422：参数无效，请按 errorMsg 提示处理。\n429：超出单日解析页数，将自动切换模型或请明天再试。\n500/503/504：服务器繁忙或超时，请稍后重试（可在设置中调大超时与重试次数）。\n\n9. 安全与隐私\nToken 使用系统安全硬件加密存储；离线模式图片完全不上传；局域网 http 明文地址仅建议在可信网络使用，公网请启用 HTTPS。历史记录与图片保存在本机应用私有目录。</string>
+
+    <string name="toast_camera_cancel">拍照已取消</string>
+    <string name="toast_no_image">未选择图片</string>
+    <string name="toast_camera_failed">无法启动相机：%1$s</string>
+    <string name="toast_load_failed">图片加载失败：%1$s</string>
+    <string name="toast_ocr_failed">识别失败：%1$s</string>
+    <string name="toast_region_too_small">识别区域过小，请重新框选</string>
+
+    <string name="ai_progress_upload">正在上传图片…</string>
+    <string name="ai_progress_pending">排队中…</string>
+    <string name="ai_progress_running">识别中…（%1$d/%2$d 页）</string>
+    <string name="ai_progress_waiting">等待结果…</string>
+
+    <string name="settings_models_title">模型特点</string>
+    <string name="settings_models_body">1. PaddleOCR-VL-1.6 / 1.5 / VL：通用文档解析与智能文字识别，支持版式分析、表格、公式、印章等，返回结构化 Markdown 结果；VL-1.6 为最新版，精度和速度更好，适合复杂文档与图片。\n2. PP-OCRv6：经典轻量 OCR 模型，速度快、体积小，适合纯文字识别。\n3. PP-OCRv5：PP-OCRv6 的上一代轻量模型，同样主打快速纯文字识别。\n4. PP-StructureV3：文档结构解析模型，擅长版面分析、表格还原、公式识别，适合需要保留文档结构的场景。\n5. 端侧离线（内置 PP-OCRv4）：本机运行，断网可用、隐私最好，适合日常纯文字场景。</string>
+</resources>

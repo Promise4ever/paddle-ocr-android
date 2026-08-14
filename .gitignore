@@ -1,0 +1,24 @@
+# 本地环境
+*.iml
+.gradle
+.kotlin
+**/local.properties
+/captures
+
+# 构建产物
+**/build/
+
+# 签名密钥与密码：严禁提交到仓库
+**/keystore.jks
+**/keystore.properties
+
+# 调试残留
+paddle_ocr.db
+ui_*.xml
+screen_*.png
+test_ocr.png
+
+# IDE
+.idea
+.vscode
+.DS_Store

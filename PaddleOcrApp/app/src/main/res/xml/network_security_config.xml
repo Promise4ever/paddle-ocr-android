@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 允许明文 HTTP，便于连接局域网内的 PaddleOCR 服务；生产环境建议改用 HTTPS -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>
