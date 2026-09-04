@@ -14,8 +14,8 @@ android {
             applicationId = "com.example.paddleocr"
             minSdk = 26
             targetSdk = 35
-            versionCode = 2
-            versionName = "1.1.0"
+            versionCode = 3
+            versionName = "1.2.0"
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // 只打包手机主流 ABI，缩小 APK（去掉 x86 模拟器镜像）
