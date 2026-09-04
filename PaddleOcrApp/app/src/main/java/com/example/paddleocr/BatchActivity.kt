@@ -110,7 +110,7 @@ class BatchActivity : AppCompatActivity() {
                 val e = dao.byId(id) ?: continue
                 sb.append("===== 第 ${n + 1} 张 =====\n")
                 val res = ResultRepository.entityToResult(e)
-                sb.append(res.fullText).append("\n\n")
+                sb.append(PlainText.convert(res)).append("\n\n")
                 n++
             }
             val file = ResultRepository.cacheFile("OCR_BATCH_${System.currentTimeMillis()}.txt")

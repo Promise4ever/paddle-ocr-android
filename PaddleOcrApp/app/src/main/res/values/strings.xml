@@ -19,11 +19,16 @@
     <string name="history_empty">暂无识别记录</string>
     <string name="history_stats">共 %1$d 行文字</string>
     <string name="history_total">共 %1$d 条记录</string>
+    <string name="history_favorite_total">共 %1$d 条收藏</string>
+    <string name="history_category_all">全部</string>
+    <string name="history_category_favorites">收藏</string>
+    <string name="history_favorite_empty">暂无收藏记录</string>
+    <string name="history_favorited_at">收藏于 %1$s</string>
     <string name="history_search_hint">搜索历史内容…</string>
     <string name="history_favorite">收藏</string>
     <string name="history_delete">删除</string>
     <string name="history_clear_title">清空历史</string>
-    <string name="history_clear_confirm">将删除全部历史记录及保存的图片，且不可恢复。确定清空吗？</string>
+    <string name="history_clear_confirm">将删除全部未收藏的历史记录及其图片；已收藏记录会保留。确定清空吗？</string>
     <string name="history_clear_ok">清空</string>
 
     <string name="quota_title">云端配额（估算）</string>
@@ -50,9 +55,26 @@
     <string name="btn_share">分享结果</string>
     <string name="btn_overlay">查看识别框</string>
     <string name="btn_export_txt">导出 TXT</string>
-    <string name="btn_export_md">导出 Markdown</string>
+    <string name="btn_export_md">导出 MD</string>
+    <string name="btn_export_docx">导出 DOCX</string>
+    <string name="share_choice_title">选择分享格式</string>
+    <string name="share_txt">分享 TXT</string>
+    <string name="share_md">分享 Markdown</string>
+    <string name="share_docx">分享 DOCX</string>
     <string name="exported">已保存</string>
     <string name="copied">已复制到剪贴板</string>
+    <string name="result_table_badge">表格</string>
+    <string name="result_table_stats">共 %1$d 个表格</string>
+    <string name="result_table_default_title">识别表格</string>
+    <string name="result_table_copy">复制</string>
+    <string name="result_table_correct">纠正</string>
+    <string name="result_table_correct_title">纠正表格</string>
+    <string name="result_table_correct_hint">可编辑以下表格内容（制表符分隔），确定后复制到剪贴板。</string>
+    <string name="result_table_correct_ok">复制纠正结果</string>
+    <string name="btn_view_tables">表格</string>
+    <string name="btn_view_markdown">全文</string>
+    <string name="btn_view_format">格式</string>
+    <string name="btn_view_plain_text">全文本</string>
     <string name="empty_result">未识别到文字</string>
 
     <string name="overlay_title">识别框叠加</string>
@@ -79,6 +101,7 @@
     <string name="settings_url_hint">API 地址</string>
     <string name="settings_token_hint">Access Token（仅 AI Studio 需要，加密存储）</string>
     <string name="settings_model_label">模型名称（AI Studio）</string>
+    <string name="settings_advanced">高级设置</string>
     <string name="settings_filetype_label">PaddleX 图片 fileType 取值</string>
     <string name="settings_hub_image_check">旧版 PaddleHub：使用 image 单字段</string>
     <string name="settings_network_title">网络与重试</string>
@@ -91,7 +114,7 @@
     <string name="settings_saved">设置已保存</string>
     <string name="settings_url_invalid">请输入以 http:// 或 https:// 开头且完整的有效地址</string>
     <string name="settings_help_title">使用说明</string>
-    <string name="help_body">1. 选择图片\n拍照识别：调用系统相机拍摄，拍完自动进入选区页面。\n从相册选择：使用系统照片选择器（无需存储权限）。\n批量识别：一次选择多张图片，自动依次全图识别，完成后可逐张查看或合并导出。\n\n2. 框选识别区域\n拖动选区或四角定位点调整范围，八方向手柄可微调，整体可移动；选区上方有放大镜预览。默认全图 100% × 100% 表示识别整张图片。识别时只上传选区部分，既省流量也更精准。\n\n3. 服务类型配置（服务器设置）\n端侧离线识别：内置 PP-OCRv4 轻量模型，完全在本机运行，无需网络、不消耗云端额度、图片不上传；适合日常纯文字识别。\nPaddleX 基础服务（PP-OCRv5/v6）：在电脑执行 pip install paddlex 后运行 paddlex --serve --pipeline OCR 启动服务（默认端口 8080），手机与电脑同一局域网时把 API 地址改为电脑局域网 IP，如 http://192.168.1.100:8080/ocr/predict。fileType 填 1（新版服务）或 0（PaddleX 3.0/3.1 旧版）。\nPaddleHub Serving（PP-OCRv3）：pip install paddlehub==2.1.0 paddlepaddle，执行 hub serving start -m ocr_system（默认端口 8866），地址形如 http://192.168.1.100:8866/predict/ocr_system；旧版可勾选 image 单字段。\nAI Studio 云端 API：打开 https://aistudio.baidu.com/paddleocr/task 创建任务，获取任务接口 URL、Access Token 与模型名称。需要手机联网，无需部署本地服务。Token 已加密存储于本机安全硬件。\n\n4. 云端模型选择（AI Studio）\nPaddleOCR-VL-1.6 / 1.5 / VL：通用文档解析与智能文字识别，支持版式分析、表格、公式、印章等，返回结构化 Markdown（结果页直接渲染表格/标题）；适合复杂文档、长文本、图文混排。\nPP-OCRv6 / PP-OCRv5：经典轻量 OCR 模型，速度快、体积小，适合纯文字识别。\nPP-StructureV3：文档结构解析模型，擅长版面分析、表格还原、公式识别。\n\n5. 云端配额\n官方规则为每模型每日 3000 页，超过返回 429。主页配额卡片按本机成功识别页数估算；可在设置中开启“额度用完自动切换模型”，429 时自动换用其他候选模型重试，全部失败才提示额度用尽。\n\n6. 识别结果\nVL 模型结果以 Markdown 展示（表格、标题、列表保持结构）；带坐标的结果可点“查看识别框”在原图上查看每个文字区域位置；支持复制、分享，以及导出 TXT / Markdown / PDF 文件。\n\n7. 历史记录\n每次识别自动存入历史（最多保留 2000 条），支持全文搜索、按日期分组、收藏、单条删除与一键清空；点击条目查看全文。\n\n8. 常见错误码\n400：参数无效，多为 optionalPayload 格式问题（云端接口请传空对象 {}）。\n403：Token 错误或 URL 与 Token 不匹配。\n413：请求体过大，请缩小图片或选区。\n422：参数无效，请按 errorMsg 提示处理。\n429：超出单日解析页数，将自动切换模型或请明天再试。\n500/503/504：服务器繁忙或超时，请稍后重试（可在设置中调大超时与重试次数）。\n\n9. 安全与隐私\nToken 使用系统安全硬件加密存储；离线模式图片完全不上传；局域网 http 明文地址仅建议在可信网络使用，公网请启用 HTTPS。历史记录与图片保存在本机应用私有目录。</string>
+    <string name="help_body">1. 选择图片\n拍照识别：调用系统相机拍摄，拍完自动进入选区页面。\n从相册选择：使用系统照片选择器（无需存储权限）。\n批量识别：一次选择多张图片，自动依次全图识别，完成后可逐张查看或合并导出。\n\n2. 框选识别区域\n拖动选区或四角定位点调整范围，八方向手柄可微调，整体可移动；选区上方有放大镜预览。默认全图 100% × 100% 表示识别整张图片。识别时只上传选区部分，既省流量也更精准。\n\n3. 服务类型配置（服务器设置）\n端侧离线识别：内置 PP-OCRv4 轻量模型，完全在本机运行，无需网络、不消耗云端额度、图片不上传；适合日常纯文字识别。\nPaddleX 基础服务（PP-OCRv5/v6）：在电脑执行 pip install paddlex 后运行 paddlex --serve --pipeline OCR 启动服务（默认端口 8080），手机与电脑同一局域网时把 API 地址改为电脑局域网 IP，如 http://192.168.1.100:8080/ocr/predict。fileType 填 1（新版服务）或 0（PaddleX 3.0/3.1 旧版）。\nPaddleHub Serving（PP-OCRv3）：pip install paddlehub==2.1.0 paddlepaddle，执行 hub serving start -m ocr_system（默认端口 8866），地址形如 http://192.168.1.100:8866/predict/ocr_system；旧版可勾选 image 单字段。\nAI Studio 云端 API：打开 https://aistudio.baidu.com/paddleocr/task 创建任务，获取任务接口 URL、Access Token 与模型名称。需要手机联网，无需部署本地服务。Token 已加密存储于本机安全硬件。\n\n4. 云端模型选择（AI Studio）\nPaddleOCR-VL-1.6 / 1.5 / VL：通用文档解析与智能文字识别，支持版式分析、表格、公式、印章等，返回结构化 Markdown（结果页直接渲染表格/标题）；适合复杂文档、长文本、图文混排。\nPP-OCRv6 / PP-OCRv5：经典轻量 OCR 模型，速度快、体积小，适合纯文字识别。\nPP-StructureV3：文档结构解析模型，擅长版面分析、表格还原、公式识别。\n\n5. 云端配额\n官方规则为每模型每日 3000 页，超过返回 429。主页配额卡片按本机成功识别页数估算；可在设置中开启“额度用完自动切换模型”，429 时自动换用其他候选模型重试，全部失败才提示额度用尽。\n\n6. 识别结果\nVL 模型结果以 Markdown 展示（表格、标题、列表保持结构）；识别到表格时结果页会提供原生表格卡片（支持复制、纠正），也可切换回全文查看；带坐标的结果可点“查看识别框”在原图上查看每个文字区域位置；支持复制、分享，以及导出 TXT / Markdown / PDF 文件。\n\n7. 历史记录\n每次识别自动存入历史（最多保留 2000 条），支持全文搜索、按日期分组、收藏、单条删除与一键清空；点击条目查看全文。\n\n8. 常见错误码\n400：参数无效，多为 optionalPayload 格式问题（云端接口请传空对象 {}）。\n403：Token 错误或 URL 与 Token 不匹配。\n413：请求体过大，请缩小图片或选区。\n422：参数无效，请按 errorMsg 提示处理。\n429：超出单日解析页数，将自动切换模型或请明天再试。\n500/503/504：服务器繁忙或超时，请稍后重试（可在设置中调大超时与重试次数）。\n\n9. 安全与隐私\nToken 使用系统安全硬件加密存储；离线模式图片完全不上传；局域网 http 明文地址仅建议在可信网络使用，公网请启用 HTTPS。历史记录与图片保存在本机应用私有目录。</string>
 
     <string name="toast_camera_cancel">拍照已取消</string>
     <string name="toast_no_image">未选择图片</string>

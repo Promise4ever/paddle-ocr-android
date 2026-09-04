@@ -65,6 +65,10 @@ class SettingsActivity : AppCompatActivity() {
         binding.modelSpinner.setSelection(
             modelOptions.indexOf(Prefs.modelName).coerceAtLeast(0)
         )
+        binding.btnAdvancedSettings.setOnClickListener {
+            val selected = modelOptions[binding.modelSpinner.selectedItemPosition]
+            startActivity(AdvancedSettingsActivity.intent(this, selected))
+        }
 
         // ---- PaddleX fileType ----
         val fileTypes = listOf(

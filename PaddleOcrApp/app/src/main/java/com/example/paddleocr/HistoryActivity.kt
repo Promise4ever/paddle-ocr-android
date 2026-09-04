@@ -69,6 +69,17 @@ class HistoryActivity : AppCompatActivity() {
             }
         })
 
+        binding.historyCategoryToggle.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked) return@addOnButtonCheckedListener
+            viewModel.setCategory(
+                if (checkedId == R.id.btnHistoryFavorites) {
+                    HistoryCategory.FAVORITES
+                } else {
+                    HistoryCategory.ALL
+                }
+            )
+        }
+
         binding.searchInput.addTextChangedListener(
             object : android.text.TextWatcher {
                 private var searchJob: kotlinx.coroutines.Job? = null
@@ -87,11 +98,20 @@ class HistoryActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.state.collect { s ->
                 adapter?.submit(s.rows)
+                binding.emptyView.text = if (s.category == HistoryCategory.FAVORITES) {
+                    getString(R.string.history_favorite_empty)
+                } else {
+                    getString(R.string.history_empty)
+                }
                 binding.emptyView.visibility =
                     if (s.rows.isEmpty() && !s.loading) View.VISIBLE else View.GONE
                 binding.historyList.visibility =
                     if (s.rows.isEmpty()) View.GONE else View.VISIBLE
-                binding.historyTotal.text = getString(R.string.history_total, s.total)
+                binding.historyTotal.text = if (s.category == HistoryCategory.FAVORITES) {
+                    getString(R.string.history_favorite_total, s.total)
+                } else {
+                    getString(R.string.history_total, s.total)
+                }
             }
         }
     }
@@ -105,7 +125,7 @@ class HistoryActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle(R.string.history_clear_title)
             .setMessage(R.string.history_clear_confirm)
-            .setPositiveButton(R.string.history_clear_ok) { _, _ -> viewModel.clearAll() }
+            .setPositiveButton(R.string.history_clear_ok) { _, _ -> viewModel.clearUnfavorited() }
             .setNegativeButton(android.R.string.cancel, null)
             .show()
     }
@@ -142,7 +162,7 @@ class HistoryAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val row = rows[position]) {
             is HistoryRow.Header -> (holder as HeaderHolder).label.text = row.label
-            is HistoryRow.Entry -> (holder as EntryHolder).bind(row.entity)
+            is HistoryRow.Entry -> (holder as EntryHolder).bind(row.entity, row.showFavoriteTime)
         }
     }
 
@@ -158,16 +178,23 @@ class HistoryAdapter(
         private val favBtn: ImageView = view.findViewById(R.id.itemFavorite)
         private val delBtn: ImageView = view.findViewById(R.id.itemDelete)
 
-        fun bind(e: HistoryEntity) {
-            time.text = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-                .format(Date(e.time))
+        fun bind(e: HistoryEntity, showFavoriteTime: Boolean) {
+            val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+            time.text = if (showFavoriteTime) {
+                itemView.context.getString(
+                    R.string.history_favorited_at,
+                    formatter.format(Date(e.favoritedAt ?: e.time))
+                )
+            } else {
+                formatter.format(Date(e.time))
+            }
             val text = runCatching {
                 val arr = JSONArray(e.linesJson)
                 val n = minOf(3, arr.length())
                 (0 until n).mapNotNull { arr.optJSONObject(it)?.optString("text") }
                     .joinToString("\n")
             }.getOrDefault("")
-            preview.text = text.ifEmpty { e.markdown?.take(200) ?: "" }
+            preview.text = PlainText.clean(text.ifEmpty { e.markdown?.take(200) ?: "" })
             val lineCount = runCatching { JSONArray(e.linesJson).length() }.getOrDefault(0)
             stats.text = itemView.context.getString(R.string.history_stats, lineCount)
 

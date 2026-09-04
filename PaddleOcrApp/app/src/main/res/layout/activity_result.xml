@@ -41,15 +41,50 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <!-- Markdown 模式：WebView 独立区域，内部滚动 -->
-    <WebView
-        android:id="@+id/resultWeb"
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/resultModeToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnFormatView"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/btn_view_format"
+            android:textSize="13sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPlainTextView"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/btn_view_plain_text"
+            android:textSize="13sp" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <!-- 格式视图：按识别顺序混排普通文字和原生表格卡片 -->
+    <ScrollView
+        android:id="@+id/resultFormatted"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:visibility="gone" />
+        android:fillViewport="true">
 
-    <!-- 纯文本模式：ScrollView 滚动 -->
+        <LinearLayout
+            android:id="@+id/formattedContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp" />
+    </ScrollView>
+
+    <!-- 全文本模式：只显示去除 Markdown / HTML 格式后的文字 -->
     <ScrollView
         android:id="@+id/resultScroll"
         android:layout_width="match_parent"
@@ -131,8 +166,16 @@
             android:id="@+id/btnExportTxt"
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="0dp"
-            android:layout_height="44dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:maxLines="1"
+            android:minHeight="48dp"
+            android:minWidth="0dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:singleLine="true"
             android:text="@string/btn_export_txt"
             android:textSize="13sp" />
 
@@ -140,10 +183,36 @@
             android:id="@+id/btnExportMd"
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="0dp"
-            android:layout_height="44dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:maxLines="1"
+            android:minHeight="48dp"
+            android:minWidth="0dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:singleLine="true"
             android:text="@string/btn_export_md"
+            android:textSize="13sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnExportDocx"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:maxLines="1"
+            android:minHeight="48dp"
+            android:minWidth="0dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:singleLine="true"
+            android:text="@string/btn_export_docx"
             android:textSize="13sp" />
     </LinearLayout>
 </LinearLayout>

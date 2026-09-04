@@ -13,7 +13,13 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.paddleocr.App
 
-@Entity(tableName = "history", indices = [Index(value = ["time"])])
+@Entity(
+    tableName = "history",
+    indices = [
+        Index(value = ["time"]),
+        Index(value = ["favorite", "favoritedAt"])
+    ]
+)
 data class HistoryEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val time: Long,
@@ -22,7 +28,9 @@ data class HistoryEntity(
     val modelName: String? = null,
     val sourceImagePath: String? = null,
     val thumbnailPath: String? = null,
-    val favorite: Boolean = false
+    val favorite: Boolean = false,
+    /** 收藏发生时间；取消收藏时为 null，用于收藏分类独立排序。 */
+    val favoritedAt: Long? = null
 )
 
 @Dao
@@ -35,6 +43,12 @@ interface HistoryDao {
 
     @Query("SELECT COUNT(*) FROM history")
     suspend fun count(): Int
+
+    @Query("SELECT * FROM history WHERE favorite = 1 ORDER BY favoritedAt DESC, time DESC LIMIT :limit OFFSET :offset")
+    suspend fun favoritePage(limit: Int, offset: Int): List<HistoryEntity>
+
+    @Query("SELECT COUNT(*) FROM history WHERE favorite = 1")
+    suspend fun favoriteCount(): Int
 
     @Query(
         "SELECT * FROM history WHERE (linesJson LIKE '%' || :q || '%' " +
@@ -49,23 +63,39 @@ interface HistoryDao {
     )
     suspend fun searchCount(q: String): Int
 
+    @Query(
+        "SELECT * FROM history WHERE favorite = 1 AND (linesJson LIKE '%' || :q || '%' " +
+            "OR COALESCE(markdown, '') LIKE '%' || :q || '%') " +
+            "ORDER BY favoritedAt DESC, time DESC LIMIT :limit OFFSET :offset"
+    )
+    suspend fun searchFavorites(q: String, limit: Int, offset: Int): List<HistoryEntity>
+
+    @Query(
+        "SELECT COUNT(*) FROM history WHERE favorite = 1 AND (linesJson LIKE '%' || :q || '%' " +
+            "OR COALESCE(markdown, '') LIKE '%' || :q || '%')"
+    )
+    suspend fun searchFavoriteCount(q: String): Int
+
     @Query("SELECT * FROM history WHERE id = :id")
     suspend fun byId(id: Long): HistoryEntity?
 
     @Query("SELECT * FROM history ORDER BY time DESC LIMIT 1")
     suspend fun latest(): HistoryEntity?
 
-    @Query("UPDATE history SET favorite = :fav WHERE id = :id")
-    suspend fun setFavorite(id: Long, fav: Boolean)
+    @Query("UPDATE history SET favorite = :fav, favoritedAt = :favoritedAt WHERE id = :id")
+    suspend fun setFavorite(id: Long, fav: Boolean, favoritedAt: Long?)
 
     @Query("DELETE FROM history WHERE id = :id")
     suspend fun delete(id: Long)
 
-    @Query("DELETE FROM history")
-    suspend fun clear()
+    @Query("SELECT * FROM history WHERE favorite = 0")
+    suspend fun unfavoritedEntries(): List<HistoryEntity>
+
+    @Query("DELETE FROM history WHERE favorite = 0")
+    suspend fun deleteUnfavorited()
 }
 
-@Database(entities = [HistoryEntity::class], version = 2, exportSchema = true)
+@Database(entities = [HistoryEntity::class], version = 3, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun historyDao(): HistoryDao
 
@@ -83,9 +113,21 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        /** v2 -> v3：新增收藏时间，并让旧收藏以原识别时间作为兼容排序时间。 */
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE history ADD COLUMN favoritedAt INTEGER")
+                db.execSQL("UPDATE history SET favoritedAt = time WHERE favorite = 1")
+                db.execSQL(
+                    "CREATE INDEX IF NOT EXISTS index_history_favorite_favoritedAt " +
+                        "ON history(favorite, favoritedAt)"
+                )
+            }
+        }
+
         fun get(): AppDatabase = instance ?: synchronized(this) {
             instance ?: Room.databaseBuilder(App.context, AppDatabase::class.java, "paddle_ocr.db")
-                .addMigrations(MIGRATION_1_2)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                 .build()
                 .also { instance = it }
         }

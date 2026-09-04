@@ -29,6 +29,7 @@ object Prefs {
     private const val KEY_TIMEOUT_READ = "timeout_read_sec"
     private const val KEY_RETRY = "retry_count"
     private const val KEY_AUTO_SWITCH = "auto_switch_model"
+    private const val KEY_ADVANCED_OPTIONS = "cloud_advanced_options"
     private const val KEY_LEGACY_MIGRATED = "legacy_history_migrated"
 
     const val LAN_DEFAULT_URL = "http://192.168.1.100:8080/ocr/predict"
@@ -114,6 +115,33 @@ object Prefs {
         set(value) {
             sp.edit().putBoolean(KEY_AUTO_SWITCH, value).apply()
         }
+
+    // ---- AI Studio 按模型保存的高级识别参数 ----
+
+    /** 未配置时返回 null，使请求继续使用云端默认参数。 */
+    fun advancedOptions(model: String): JSONObject? {
+        val all = runCatching {
+            JSONObject(sp.getString(KEY_ADVANCED_OPTIONS, "{}") ?: "{}")
+        }.getOrDefault(JSONObject())
+        return all.optJSONObject(model)?.let { JSONObject(it.toString()) }
+    }
+
+    fun saveAdvancedOptions(model: String, payload: JSONObject) {
+        val all = runCatching {
+            JSONObject(sp.getString(KEY_ADVANCED_OPTIONS, "{}") ?: "{}")
+        }.getOrDefault(JSONObject())
+        all.put(model, JSONObject(payload.toString()))
+        sp.edit().putString(KEY_ADVANCED_OPTIONS, all.toString()).apply()
+    }
+
+    /** 恢复该模型的云端默认参数。 */
+    fun clearAdvancedOptions(model: String) {
+        val all = runCatching {
+            JSONObject(sp.getString(KEY_ADVANCED_OPTIONS, "{}") ?: "{}")
+        }.getOrDefault(JSONObject())
+        all.remove(model)
+        sp.edit().putString(KEY_ADVANCED_OPTIONS, all.toString()).apply()
+    }
 
     // ---- 旧版历史迁移 ----
 

@@ -104,10 +104,14 @@ object ResultRepository {
         }
     }
 
-    suspend fun clearAll() = withContext(Dispatchers.IO) {
-        dao().clear()
-        val dir = File(App.context.filesDir, RESULT_DIR)
-        dir.listFiles()?.forEach { runCatching { it.delete() } }
+    /** 清空未收藏历史；收藏记录及其原图、缩略图全部保留。 */
+    suspend fun clearUnfavorited() = withContext(Dispatchers.IO) {
+        val dao = dao()
+        val removed = dao.unfavoritedEntries()
+        dao.deleteUnfavorited()
+        removed.flatMap { listOfNotNull(it.sourceImagePath, it.thumbnailPath) }
+            .filter { it.startsWith(App.context.filesDir.absolutePath) }
+            .forEach { runCatching { File(it).delete() } }
     }
 
     /**

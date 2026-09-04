@@ -17,6 +17,7 @@ paddle_ocr.db
 ui_*.xml
 screen_*.png
 test_ocr.png
+/.dsh-uploads/
 
 # IDE
 .idea

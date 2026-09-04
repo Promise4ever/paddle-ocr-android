@@ -14,8 +14,10 @@ import kotlinx.coroutines.launch
 /** 带日期分组头的列表行 */
 sealed class HistoryRow {
     data class Header(val label: String) : HistoryRow()
-    data class Entry(val entity: HistoryEntity) : HistoryRow()
+    data class Entry(val entity: HistoryEntity, val showFavoriteTime: Boolean = false) : HistoryRow()
 }
+
+enum class HistoryCategory { ALL, FAVORITES }
 
 data class HistoryUiState(
     val rows: List<HistoryRow> = emptyList(),
@@ -23,7 +25,8 @@ data class HistoryUiState(
     val loading: Boolean = false,
     val hasMore: Boolean = true,
     val total: Int = 0,
-    val searching: Boolean = false
+    val searching: Boolean = false,
+    val category: HistoryCategory = HistoryCategory.ALL
 )
 
 /**
@@ -49,8 +52,7 @@ class HistoryViewModel : ViewModel() {
             _state.value = _state.value.copy(loading = true)
             page = 0
             val dao = ResultRepository.dao()
-            val total = if (_state.value.query.isBlank()) dao.count()
-            else dao.searchCount(_state.value.query)
+            val total = countResults(dao)
             val pageData = fetchPage(0)
             _state.value = _state.value.copy(
                 rows = buildRows(pageData),
@@ -64,6 +66,12 @@ class HistoryViewModel : ViewModel() {
 
     fun search(q: String) {
         _state.value = _state.value.copy(query = q)
+        reload()
+    }
+
+    fun setCategory(category: HistoryCategory) {
+        if (_state.value.category == category) return
+        _state.value = _state.value.copy(category = category)
         reload()
     }
 
@@ -86,22 +94,47 @@ class HistoryViewModel : ViewModel() {
 
     private suspend fun fetchPage(p: Int): List<HistoryEntity> {
         val dao = ResultRepository.dao()
-        return if (_state.value.query.isBlank()) dao.page(pageSize, p * pageSize)
-        else dao.search(_state.value.query, pageSize, p * pageSize)
+        val query = _state.value.query
+        return when (_state.value.category) {
+            HistoryCategory.ALL -> if (query.isBlank()) {
+                dao.page(pageSize, p * pageSize)
+            } else {
+                dao.search(query, pageSize, p * pageSize)
+            }
+            HistoryCategory.FAVORITES -> if (query.isBlank()) {
+                dao.favoritePage(pageSize, p * pageSize)
+            } else {
+                dao.searchFavorites(query, pageSize, p * pageSize)
+            }
+        }
+    }
+
+    private suspend fun countResults(dao: com.example.paddleocr.data.HistoryDao): Int {
+        val query = _state.value.query
+        return when (_state.value.category) {
+            HistoryCategory.ALL -> if (query.isBlank()) dao.count() else dao.searchCount(query)
+            HistoryCategory.FAVORITES -> if (query.isBlank()) {
+                dao.favoriteCount()
+            } else {
+                dao.searchFavoriteCount(query)
+            }
+        }
     }
 
     private fun buildRows(data: List<HistoryEntity>, existing: List<HistoryRow> = emptyList()): List<HistoryRow> {
         val out = mutableListOf<HistoryRow>()
+        val favoriteMode = _state.value.category == HistoryCategory.FAVORITES
+        fun groupTime(e: HistoryEntity) = if (favoriteMode) e.favoritedAt ?: e.time else e.time
         val lastDate = existing.filterIsInstance<HistoryRow.Entry>()
-            .lastOrNull()?.entity?.let { dateLabel(it.time) }
+            .lastOrNull()?.entity?.let { dateLabel(groupTime(it)) }
         var prevDate = lastDate
         for (e in data) {
-            val label = dateLabel(e.time)
+            val label = dateLabel(groupTime(e))
             if (label != prevDate) {
                 out.add(HistoryRow.Header(label))
                 prevDate = label
             }
-            out.add(HistoryRow.Entry(e))
+            out.add(HistoryRow.Entry(e, showFavoriteTime = favoriteMode))
         }
         return out
     }
@@ -114,7 +147,8 @@ class HistoryViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val dao = ResultRepository.dao()
             val e = dao.byId(id) ?: return@launch
-            dao.setFavorite(id, !e.favorite)
+            val favorite = !e.favorite
+            dao.setFavorite(id, favorite, if (favorite) System.currentTimeMillis() else null)
             reload()
         }
     }
@@ -126,9 +160,9 @@ class HistoryViewModel : ViewModel() {
         }
     }
 
-    fun clearAll() {
+    fun clearUnfavorited() {
         viewModelScope.launch(Dispatchers.IO) {
-            ResultRepository.clearAll()
+            ResultRepository.clearUnfavorited()
             reload()
         }
     }

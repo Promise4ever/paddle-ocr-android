@@ -102,16 +102,15 @@ object MdToHtml {
                 i++
                 continue
             }
-            // 表格：当前行含 | 且下一行是分隔行（---）
-            if (line.startsWith("|") && i + 1 < lines.size &&
-                Regex("^\\|?[\\s:|-]+\\|?$").matches(lines[i + 1].trim()) &&
-                lines[i + 1].contains('-')
+            // 表格：当前行含 | 且下一行是分隔行（---），支持有无首尾竖线
+            if (line.contains('|') && i + 1 < lines.size &&
+                isDelimiter(lines[i + 1].trim())
             ) {
                 tableBuf.clear()
                 tableBuf.add(line)
                 tableBuf.add(lines[i + 1].trim())
                 var j = i + 2
-                while (j < lines.size && lines[j].trim().startsWith("|")) {
+                while (j < lines.size && isTableRow(lines[j].trim())) {
                     tableBuf.add(lines[j].trim())
                     j++
                 }
@@ -162,6 +161,14 @@ object MdToHtml {
         flushTable()
         return sb.toString()
     }
+
+    private fun isDelimiter(line: String): Boolean {
+        if (line.isBlank() || !line.contains('-') || !line.contains('|')) return false
+        return line.all { it == '|' || it == '-' || it == ':' || it.isWhitespace() }
+    }
+
+    private fun isTableRow(line: String): Boolean =
+        line.contains('|') && !isDelimiter(line)
 
     /** 行内语法：粗体/斜体/行内代码/链接 */
     private fun inline(s: String): String {

@@ -45,9 +45,10 @@ class MainViewModel : ViewModel() {
                 runCatching {
                     val arr = JSONArray(raw)
                     val n = minOf(4, arr.length())
-                    (0 until n).mapNotNull {
+                    val text = (0 until n).mapNotNull {
                         arr.optJSONObject(it)?.optString("text")
                     }.joinToString("\n")
+                    PlainText.clean(text)
                 }.getOrDefault("")
             } ?: ""
             _state.value = MainUiState(

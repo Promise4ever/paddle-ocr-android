@@ -334,11 +334,13 @@ object OcrClient {
         val auth = "bearer ${Prefs.token}"
 
         onProgress?.invoke("正在上传图片…")
-        // 该接口对 optionalPayload 校验严格：空对象 {} 使用服务端默认参数
+        // 按实际调用模型取配置；自动切换模型时不会把一个模型的参数误传给另一个模型。
+        // 未保存高级设置时仍传空对象，沿用服务端默认参数。
+        val optionalPayload = Prefs.advancedOptions(model)?.toString() ?: "{}"
         val multipart = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("model", model)
-            .addFormDataPart("optionalPayload", "{}")
+            .addFormDataPart("optionalPayload", optionalPayload)
             .addFormDataPart(
                 "file",
                 "ocr_crop.jpg",

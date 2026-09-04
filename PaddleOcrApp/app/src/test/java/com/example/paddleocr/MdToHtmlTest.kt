@@ -32,4 +32,12 @@ class MdToHtmlTest {
         assertTrue(html.contains("<table>"))
         assertTrue(html.contains("<td>1</td>"))
     }
+
+    @Test
+    fun `无首尾竖线表格正常渲染`() {
+        val md = "A | B\n--- | ---\n1 | 2"
+        val html = MdToHtml.convert(md, dark = false)
+        assertTrue(html.contains("<table>"))
+        assertTrue(html.contains("<td>1</td>"))
+    }
 }
